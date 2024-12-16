@@ -23,7 +23,7 @@ CLEAR_HOME	  EQU   $01               	; Clear the display and home the cursor
 INTERFACE 	  EQU   $38               	; 8 bit interface, two line display
 CURSOR_OFF	  EQU   $0C               	; Display on, cursor off
 SHIFT_OFF 	  EQU   $06               	; Address increments, no character shift
-LCD_SEC_LINE  EQU   64                	; Starting addr. of 2nd line of LCD (note decimal value!)
+LCD_SEC_LINE          EQU   64                	; Starting addr. of 2nd line of LCD (note decimal value!)
 
 ; LCD Addresses
 ; -------------
@@ -41,18 +41,18 @@ SPACE     	  EQU   ' '               	; The space character
 ;Timers
 ;---------------
 T_LEFT    	  EQU   4
-T_RIGHT     	EQU   4
+T_RIGHT     	  EQU   4
 
 ; States for robot
 ;-----------------
-START       	EQU   0
+START       	  EQU   0
 FWD       	  EQU   1
 ALL_STOP  	  EQU   2
-LEFT_TRN    	EQU   3
+LEFT_TRN    	  EQU   3
 RIGHT_TRN 	  EQU   4
 REV_TRN   	  EQU   5                	 
 LEFT_ALIGN	  EQU   6                	 
-RIGHT_ALIGN   EQU   7                	 
+RIGHT_ALIGN           EQU   7                	 
 
 ; variable/data section
 ; ---------------------
@@ -77,11 +77,11 @@ TEMP      	RMB   1                   	; Temporary location
 ; Storage Registers (9S12C32 RAM space: $3800 ... $3FFF)
 ; ------------------------------------------------------
 SENSOR_LINE   FCB   $01                 	; Storage for guider sensor readings
-SENSOR_BOW	  FCB   $23                 	; Initialized to test values
+SENSOR_BOW    FCB   $23                 	; Initialized to test values
 SENSOR_PORT   FCB   $45   
-SENSOR_MID  	FCB   $67
+SENSOR_MID    FCB   $67
 SENSOR_STBD   FCB   $89
-SENSOR_NUM	  RMB   1 
+SENSOR_NUM    RMB   1 
 
 BASE_BOW  	  FCB   $BF    ;a           ;Black Surface Sensor Values (High)
 BASE_MID  	  FCB   $CD    ;b
@@ -98,12 +98,12 @@ STARBOARD_VARIANCE  	FCB   $39
 ; variable section
 ;***************************************************************************************************
           	  ORG   $3850               	; Where our TOF counter register lives
-TOF_COUNTER   dc.b  0                   	; The timer, incremented at 23Hz
+TOF_COUNTER           dc.b  0                   	; The timer, incremented at 23Hz
 CRNT_STATE	  dc.b  2                   	; Current state register
 T_TURN    	  ds.b  1                   	; time to stop turning
-TEN_THOUS   	ds.b  1                   	; 10,000 digit
+TEN_THOUS   	  ds.b  1                   	; 10,000 digit
 THOUSANDS 	  ds.b  1                   	; 1,000 digit
-HUNDREDS    	ds.b  1                   	; 100 digit
+HUNDREDS    	  ds.b  1                   	; 100 digit
 TENS      	  ds.b  1                   	; 10 digit
 UNITS     	  ds.b  1                   	; 1 digit
 NO_BLANK  	  ds.b  1                   	; Used in leading zero blanking by BCD2ASC
@@ -181,21 +181,21 @@ ASTOP          	CMPA  #ALL_STOP          ; Verify if the robot's state is ALL_ST
               	JSR   ALL_STOP_ST        ; Validate ALL_STOP state
               	RTS                                    	 
 
-LEFT_TURN       CMPA  #LEFT_TRN          ; Verify if the robot's state is LEFT_TURN
+LEFT_TURN           CMPA  #LEFT_TRN          ; Verify if the robot's state is LEFT_TURN
               	BNE   RIGHT_TURN         ; If not, move to RIGHT_TURN state validation
               	JSR   LEFT               ; Validate LEFT_TURN state
               	RTS                                                                                                                 	 
 
-L_ALIGN         CMPA  #LEFT_ALIGN        ; Verify if the robot's state is LEFT_ALIGN
+L_ALIGN             CMPA  #LEFT_ALIGN        ; Verify if the robot's state is LEFT_ALIGN
               	BNE   R_ALIGN            ; If not, move to RIGHT_ALIGN state validation
               	JSR   LEFT_ALIGN_DONE    ; Validate LEFT_ALIGN state
               	RTS
 
-RIGHT_TURN      CMPA  #RIGHT_TRN         ; Verify if the robot's state is RIGHT_TURN
+RIGHT_TURN          CMPA  #RIGHT_TRN         ; Verify if the robot's state is RIGHT_TURN
               	BNE   REV_TURN           ; If not, move to REV_TURN state validation
               	JSR   RIGHT              ; Validate RIGHT_TURN state                                 	 
 
-R_ALIGN         CMPA  #RIGHT_ALIGN       ; Verify if the robot's state is RIGHT_ALIGN
+R_ALIGN             CMPA  #RIGHT_ALIGN       ; Verify if the robot's state is RIGHT_ALIGN
               	JSR   RIGHT_ALIGN_DONE   ; Validate RIGHT_ALIGN state
               	RTS                    	 ; INVALID state
 
@@ -210,7 +210,7 @@ START_ST      	BRCLR PORTAD0, %00000100,NO_FWD
               	BRA   START_EXIT
 
 NO_FWD         	NOP
-START_EXIT      RTS                                                                                                                             	 
+START_EXIT          RTS                                                                                                                             	 
 
 ;***************************************************************************************************
 
@@ -237,8 +237,8 @@ NO_FWD_BUMP   	BRSET PORTAD0, $08, NO_REAR_BUMP  	; Checks if the stern bumper
               	JSR 	del_50us                                                           	 
               	LBRA	EXIT 
              	 
-NO_REAR_BUMP    LDAA	SENSOR_BOW                                                         	 
-                ADDA	BOW_VARIANCE                                                          	 
+NO_REAR_BUMP        LDAA	SENSOR_BOW                                                         	 
+                    ADDA	BOW_VARIANCE                                                          	 
                	CMPA	BASE_BOW                                                           	 
                	BPL 	MISALIGNMENT     ;if CMP positive or equal than sensor value above base line...                                                      	 
                	                       ;...branches to fix the alignmnet
@@ -280,32 +280,32 @@ NO_BOW        	LDAA	SENSOR_STBD
 ;***************************************************************************************************
 
 PARTIAL_LEFT_TRN  LDY   #6000                                                            	 
-              	  JSR 	del_50us                                                           	 
-               	  JSR 	INIT_LEFT                                                          	 
-               	  MOVB	#LEFT_TRN, CRNT_STATE                                             	 
-               	  LDY 	#6000                                                              	 
-               	  JSR 	del_50us                                                           	 
-               	  BRA 	EXIT                                                               	 
+              	    JSR 	del_50us                                                           	 
+               	    JSR 	INIT_LEFT                                                          	 
+               	    MOVB	#LEFT_TRN, CRNT_STATE                                             	 
+               	    LDY 	#6000                                                              	 
+               	    JSR 	del_50us                                                           	 
+               	    BRA 	EXIT                                                               	 
 
-CHECK_LEFT_ALIGN  JSR 	INIT_LEFT                                                          	 
-              	  MOVB	#LEFT_ALIGN, CRNT_STATE                                            	 
-              	  BRA 	EXIT
+CHECK_LEFT_ALIGN        JSR 	INIT_LEFT                                                          	 
+              	    MOVB	#LEFT_ALIGN, CRNT_STATE                                            	 
+              	    BRA 	EXIT
 
 ;***************************************************************************************************
 
 PARTIAL_RIGHT_TRN LDY   #6000                                                             	 
-              	  JSR 	del_50us                                                           	 
-              	  JSR 	INIT_RIGHT                                                         	 
-                	MOVB	#RIGHT_TRN, CRNT_STATE                                            	 
-              	  LDY 	#6000                                                              	 
-              	  JSR 	del_50us                                                           	 
-              	  BRA 	EXIT                                                              	 
+              	    JSR 	del_50us                                                           	 
+              	    JSR 	INIT_RIGHT                                                         	 
+                	    MOVB	#RIGHT_TRN, CRNT_STATE                                            	 
+              	    LDY 	#6000                                                              	 
+              	    JSR 	del_50us                                                           	 
+              	    BRA 	EXIT                                                              	 
 
-CHECK_RIGHT_ALIGN JSR 	INIT_RIGHT                                                         	 
-              	  MOVB	#RIGHT_ALIGN, CRNT_STATE                                           	 
-              	  BRA 	EXIT                                                                                                                                                    	 
+CHECK_RIGHT_ALIGN       JSR 	INIT_RIGHT                                                         	 
+              	    MOVB	#RIGHT_ALIGN, CRNT_STATE                                           	 
+              	    BRA 	EXIT                                                                                                                                                    	 
 
-EXIT            	RTS
+EXIT            	    RTS
 
 ;***************************************************************************************************                                                                       	 
 
@@ -315,7 +315,7 @@ LEFT          	  LDAA	SENSOR_BOW
               	  BPL 	LEFT_ALIGN_DONE                                                   	 
               	  BMI 	EXIT
 
-LEFT_ALIGN_DONE   MOVB	#FWD, CRNT_STATE                                                   	 
+LEFT_ALIGN_DONE       MOVB	#FWD, CRNT_STATE                                                   	 
               	  JSR 	INIT_FWD                                                           	 
               	  BRA 	EXIT                                                               	 
 
@@ -325,7 +325,7 @@ RIGHT         	  LDAA	SENSOR_BOW
               	  BPL 	RIGHT_ALIGN_DONE                                                   	 
               	  BMI 	EXIT
 
-RIGHT_ALIGN_DONE  MOVB	#FWD, CRNT_STATE                                                   	 
+RIGHT_ALIGN_DONE      MOVB	#FWD, CRNT_STATE                                                   	 
               	  JSR 	INIT_FWD                                                           	 
               	  BRA 	EXIT                                                               	 
 
