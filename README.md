@@ -4,8 +4,8 @@
 > An autonomous maze navigation system capable of learning and solving a maze using assembly language.
 
 ### Table of Contents
-- [Project Description](https://github.com/asce2619/SyncEd#Project-Description)
-- [Project Inspiration](https://github.com/asce2619/SyncEd#project-inspiration)
+- [Project Description](https://github.com/asce2619/E-BOT-Maze-Run#project-description)
+- [Tools and Framework](https://github.com/asce2619/SyncEd#Tools-and-Framework)
 
 ## Project Description
 This project centers around the development of a robot equipped with a sophisticated guidance system. The guider is designed to follow a line on the ground, utilizing a set of photoresistors and LEDs for sensing the environment. While the bot traverses through the maze it identifies dead ends and retraces its path back to the start of a junction when it encounters an obstacle. The robot "learns" the correct path through trial and error.
