@@ -1,7 +1,7 @@
 ; *****************************************************************
 ; * COE538 FINAL PROJECT F2024                                    *
 ; *                                                               *
-; * FINAL CODE (excluding bonus)                                 	*
+; * FINAL CODE (excluding bonus)                                  *
 ; *                                                               *
 ; * Project by: Jannis Saini, Neha Rajeev Gogate, and Najiba Imam *
 ; *                                                               *
