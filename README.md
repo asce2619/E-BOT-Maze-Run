@@ -39,7 +39,7 @@ This project centers around the development of a robot equipped with a sophistic
 ## Subsystems
 **Sensor Scanner:** Reads and thresholds photodetector signals.
 
-**Navigation Manager:** Tracks intersections and makes decisions.
+**Dispatcher:** State control while tracking intersections and making decisions. 
 
 **Motor Controller:** Adjusts motor speeds for steering and turning.
 
