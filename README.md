@@ -55,10 +55,8 @@ This project centers around the development of a robot equipped with a sophistic
 - Resolving sensor crosstalk and ensuring accurate light detection.
 
 ## Authors
-Jannis Saini
-
-Neha Rajeev Gogate
-
+Jannis Saini <br />
+Neha Rajeev Gogate <br />
 Najiba Imam
 
 ## Video Demo
